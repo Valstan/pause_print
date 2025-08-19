@@ -1,14 +1,22 @@
-# Build artifacts
+# Build artifacts (anywhere)
 bin/
 obj/
+out/
 artifacts/
+Debug/
+Release/
+x64/
+x86/
+bld/
 
 # Local dotnet SDK
 .dotnet/
 
-# VS/VSCode
+# VS/VSCode/IDE
 .vs/
 .vscode/
+.idea/
+*.code-workspace
 *.user
 *.suo
 *.userosscache
@@ -23,13 +31,27 @@ packages/
 *.nupkg
 *.snupkg
 
-# Test
+# Test outputs
 TestResults/
+*.trx
 .coverage
 .coverage*
 coverage*
 
-# Others
+# Generated (WPF/WinUI)
+**/*.g.cs
+**/*.g.i.cs
+**/*.g.hpp
+**/*.g.h
+**/*.baml
+**/*.g.resources
+
+# Compiled binaries (never commit)
+**/*.dll
+**/*.pdb
+**/*.exe
+
+# OS junk
 *.tmp
 *.DS_Store
 Thumbs.db
