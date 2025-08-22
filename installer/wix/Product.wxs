@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="PausePrint" Manufacturer="PausePrint" Version="0.1.0" UpgradeCode="{B2C2C2D2-3C44-4E43-8B3E-5B8DBA8C1B10}" Language="1049">
+    <MediaTemplate/>
+    <MajorUpgrade DowngradeErrorMessage="Нельзя установить более старую версию поверх новой."/>
+    <Feature Id="MainFeature" Title="PausePrint" Level="1">
+      <ComponentGroupRef Id="AppFiles"/>
+      <ComponentRef Id="PortMonitor"/>
+    </Feature>
+  </Package>
+
+  <Fragment>
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="PausePrint"/>
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="PausePrint"/>
+    </StandardDirectory>
+    <StandardDirectory Id="DesktopFolder"/>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+      <Component Id="PausePrintExe" Guid="{3A1F5BAE-6F98-4C36-8E27-8E6F9B3CF40C}">
+        <File Id="ExeFile" Source="$(var.PublishDir)\PausePrint.UI.exe" KeyPath="yes"/>
+        <Shortcut Id="StartMenuShortcut" Directory="ApplicationProgramsFolder" Name="PausePrint" Target="[INSTALLFOLDER]PausePrint.UI.exe"/>
+        <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="PausePrint" Target="[INSTALLFOLDER]PausePrint.UI.exe"/>
+      </Component>
+      <Component Id="PortMonitor" Guid="{E0C6A7E5-B24F-4B19-9E58-89D2337A09D3}">
+        <File Id="PortMonFile" Source="$(var.PublishDir)\PausePrintPortMonitor.dll" KeyPath="yes"/>
+        <ServiceInstall Id="PortMonReg" Name="PausePrintPortMonitor" Type="ownProcess" Start="demand" Vital="no" ErrorControl="ignore"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
+
+

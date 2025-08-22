@@ -7,9 +7,47 @@
         mc:Ignorable="d"
         Title="PausePrint" Height="400" Width="600">
     <DockPanel>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="8">
-            <Button Content="Пауза" Margin="0,0,8,0" Width="100"/>
-            <Button Content="Возобновить" Width="100"/>
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Margin="8" x:Name="Toolbar">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <Button Content="Старт мониторинга" Margin="0,0,8,0" Width="160" Click="StartClick"/>
+                <Button Content="Стоп" Width="100" Click="StopClick"/>
+                <CheckBox Content="Автопауза новых заданий" Name="AutoHoldCheck" IsChecked="True" Margin="12,0,0,0"/>
+                <Ellipse Width="12" Height="12" Margin="12,0,0,0">
+                    <Ellipse.Fill>
+                        <SolidColorBrush x:Name="StatusBrush" Color="Gray"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <TextBlock Name="StatusText" Text="Остановлено" Margin="6,0" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <TextBlock Text="Троттлинг: после каждых" VerticalAlignment="Center"/>
+                <TextBox Name="ThrottleK" Width="40" Margin="6,0" Text="3"/>
+                <TextBlock Text="заданий пауза" VerticalAlignment="Center"/>
+                <TextBox Name="ThrottleT" Width="40" Margin="6,0" Text="60"/>
+                <TextBlock Text="сек" VerticalAlignment="Center"/>
+                <Button Content="Применить" Margin="12,0,0,0" Click="ApplyThrottleClick"/>
+                <TextBlock Name="ApplyJobsHint" Visibility="Collapsed" Foreground="Green" Text="✓ Применено" Margin="8,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <CheckBox Content="Пауза по страницам" Name="PagesPauseEnabled" IsChecked="False"/>
+                <TextBlock Text=", каждые" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                <TextBox Name="PagesEvery" Width="40" Margin="6,0" Text="2"/>
+                <TextBlock Text="страниц" VerticalAlignment="Center"/>
+                <TextBlock Text=", пауза" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                <TextBox Name="PagesPauseSec" Width="40" Margin="6,0" Text="5"/>
+                <TextBlock Text="сек" VerticalAlignment="Center"/>
+                <Button Content="Применить" Margin="12,0,0,0" Click="ApplyPagesThrottleClick"/>
+                <TextBlock Name="ApplyPagesHint" Visibility="Collapsed" Foreground="Green" Text="✓ Применено" Margin="8,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Принтеры:" VerticalAlignment="Center"/>
+                <ComboBox Name="PrintersCombo" Width="250" Margin="6,0"/>
+                <Button Content="Добавить" Margin="6,0" Click="AddPrinterClick"/>
+                <Button Content="Очистить" Margin="6,0" Click="ClearPrintersClick"/>
+                <CheckBox Content="Автозапуск" Name="AutoStartCheck" Margin="12,0,0,0"/>
+                <Button Content="Сохранить" Margin="6,0" Click="SaveAutoStartClick"/>
+                <TextBlock Name="SavedAutoStartHint" Visibility="Collapsed" Foreground="Green" Text="✓ Сохранено" Margin="8,0,0,0"/>
+            </StackPanel>
         </StackPanel>
         <ListView Margin="8" Name="JobsList" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext}">
             <ListView.View>
@@ -18,6 +56,16 @@
                     <GridViewColumn Header="JobId" Width="80" DisplayMemberBinding="{Binding JobId}"/>
                     <GridViewColumn Header="Пользователь" Width="120" DisplayMemberBinding="{Binding UserName}"/>
                     <GridViewColumn Header="Документ" Width="220" DisplayMemberBinding="{Binding DocumentName}"/>
+                    <GridViewColumn Header="Действия" Width="160">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Печать" Margin="0,0,6,0" Padding="6,2" Click="ResumeClick"/>
+                                    <Button Content="Отмена" Padding="6,2" Click="CancelClick"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

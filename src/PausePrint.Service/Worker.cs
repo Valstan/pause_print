@@ -88,7 +88,8 @@ public class Worker : BackgroundService
     private void MonitorPrinterAsync(string printerName, CancellationToken token)
     {
         _logger.LogInformation("Monitoring: {printer}", printerName);
-        if (!WinSpool.OpenPrinter(printerName, out var hPrinter, IntPtr.Zero))
+        var defaults = new WinSpool.PRINTER_DEFAULTS { DesiredAccess = WinSpool.PRINTER_ALL_ACCESS, pDatatype = IntPtr.Zero, pDevMode = IntPtr.Zero };
+        if (!WinSpool.OpenPrinter(printerName, out var hPrinter, ref defaults))
         {
             _logger.LogWarning("OpenPrinter failed {printer}: {err}", printerName, Marshal.GetLastWin32Error());
             return;
@@ -124,7 +125,7 @@ public class Worker : BackgroundService
             }
             finally
             {
-                WinSpool.FindCloseChangeNotification(change);
+                WinSpool.FindClosePrinterChangeNotification(change);
             }
         }
         finally
@@ -135,7 +136,8 @@ public class Worker : BackgroundService
 
     private void TryPublishLatestJobEvent(string printerName)
     {
-        if (!WinSpool.OpenPrinter(printerName, out var hPrinter, IntPtr.Zero)) return;
+        var defaults = new WinSpool.PRINTER_DEFAULTS { DesiredAccess = WinSpool.PRINTER_ALL_ACCESS, pDatatype = IntPtr.Zero, pDevMode = IntPtr.Zero };
+        if (!WinSpool.OpenPrinter(printerName, out var hPrinter, ref defaults)) return;
         try
         {
             WinSpool.EnumJobs(hPrinter, 0, 1, 1, IntPtr.Zero, 0, out var needed, out var returned);

@@ -30,6 +30,32 @@ public static class InteropHelpers
 }
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+public struct PRINTER_INFO_2
+{
+    public IntPtr pServerName;
+    public IntPtr pPrinterName;
+    public IntPtr pShareName;
+    public IntPtr pPortName;
+    public IntPtr pDriverName;
+    public IntPtr pComment;
+    public IntPtr pLocation;
+    public IntPtr pDevMode;
+    public IntPtr pSeparatorFile;
+    public IntPtr pPrintProcessor;
+    public IntPtr pDatatype;
+    public IntPtr pParameters;
+    public IntPtr pSecurityDescriptor;
+    public uint Attributes;
+    public uint Priority;
+    public uint DefaultPriority;
+    public uint StartTime;
+    public uint UntilTime;
+    public uint Status;
+    public uint cJobs;
+    public uint AveragePPM;
+}
+
+[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 public struct PRINTER_INFO_1
 {
     public uint Flags;
